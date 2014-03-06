@@ -1,0 +1,31 @@
+{
+    "name": "connect-live",
+    "description": "Watch for file changes and keep browser up-to-date",
+    "version": "0.0.1",
+     "author": {
+        "name": "West Lane",
+        "email": "west@paperequator.com"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/west/connect-watch.git"
+    },
+    "dependencies": {
+        "chokidar": "*",
+        "send": "*",
+        "socket.io":">= 0.9.x"
+    },
+    "devDependencies": {
+        "connect": "*",
+        "mocha": ">= 1.14.0",
+        "should": "*"
+    },
+    "main": "index",
+    "engines": {
+        "node": ">= 0.10.0"
+    },
+    "scripts": {
+        "test": "mocha ./test"
+    }
+}
