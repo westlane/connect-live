@@ -15,6 +15,13 @@ describe("inject", function() {
         });
     });
 
+    it("should inject in HTML for default index file", function(done) {
+        helpers.get("", function(err, resp, body) {            
+            should.not.exist(err);
+            should.exist(body.match("__refresh__.js"));
+            return done();
+        });
+    });
 
     it("should not inject in CSS", function(done) {
         helpers.get("main.css", function(err, resp, body) {

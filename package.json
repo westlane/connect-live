@@ -12,12 +12,13 @@
         "url": "git://github.com/west/connect-watch.git"
     },
     "dependencies": {
-        "chokidar": "*",
-        "send": "*",
+        "chokidar": ">= 0.8.x",
+        "mime": ">= 1.2.x",
+        "send": "0.2.x",
         "socket.io":">= 0.9.x"
     },
     "devDependencies": {
-        "connect": "*",
+        "connect": "2.x",
         "mocha": ">= 1.14.0",
         "should": "*"
     },

@@ -8,6 +8,7 @@
 
  var send = require("send")
     , path = require("path")
+    , mime = require("mime")
     , socket = require("socket.io")
     , bind = require("./lib/bind");
 
@@ -16,9 +17,10 @@ exports = module.exports =  function(root, options) {
     // root required
     if (!root) throw new Error('live() root path required');
 
-    // allow custom-defined search phrase
     options = options || {};
-    options.search = options.search || /<\/body>/;
+    options.index = options.index || 'index.html';
+    options.search = options.search || /<\/body>/; // insert script here 
+
 
     // setup socket.io instance
     var io = null;
@@ -93,7 +95,15 @@ exports = module.exports =  function(root, options) {
             // assume we're serving static files based on root
             // also support connect-compile middleware
             var files = req.files || [];
+
             var main_file = path.resolve(root + req.url);
+            if (!req.url.match("\.[A-Za-z1-9]$")) {
+                // this could be a default view
+                // so make sure we don't try to watch the entire directory
+                main_file = path.normalize(main_file + "/" + options.index);
+                content_type = mime.lookup(main_file);
+            }
+
             files.push(main_file)
             for (var idx in files) {
                 bind(files[idx], req.url, content_type, onChange);
