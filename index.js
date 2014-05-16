@@ -67,8 +67,10 @@ exports = module.exports =  function(root, options) {
         //overload write() to inject script in HTML
         res.write = function(chunk, encoding){
             if (content_type === null) {
-                content_type = res.getHeader("content-type")
-                    .match(/[a-z]*\/[a-z]*/)[0];
+                if (res.getHeader("content-type")) {
+                    content_type = res.getHeader("content-type")
+                        .match(/[a-z]*\/[a-z]*/)[0];
+                }
             }
             if (content_type == "text/html") {      
                 content_length += getSize(chunk);
