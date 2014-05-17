@@ -7,6 +7,7 @@
 
 
  var send = require("send")
+    , fs = require("fs")
     , path = require("path")
     , mime = require("mime")
     , socket = require("socket.io")
@@ -57,6 +58,10 @@ exports = module.exports =  function(root, options) {
                 .root(__dirname + '/public')
                 .pipe(res);
         }
+        // make sure we don't try to watch socket.io files
+        else if (req.url.match("/socket.io/")) {
+            return next();
+        }
 
         //overload writeHead() to knock out any pre-defined content length
         res.writeHead = function(statusCode, reasonPhrase, headers) {
@@ -96,7 +101,7 @@ exports = module.exports =  function(root, options) {
             // now watch any requested URL or includes
             // assume we're serving static files based on root
             // also support connect-compile middleware
-            var files = req.files || [];
+            var watch = req.parts || [];
 
             var main_file = path.resolve(root + req.url);
             if (!req.url.match("\.[A-Za-z1-9]$")) {
@@ -106,9 +111,11 @@ exports = module.exports =  function(root, options) {
                 content_type = mime.lookup(main_file);
             }
 
-            files.push(main_file)
-            for (var idx in files) {
-                bind(files[idx], req.url, content_type, onChange);
+            watch.push(main_file)
+            for (var idx in watch) {
+                if (fs.existsSync(watch[idx])) {
+                    bind(root,watch[idx], req.url, content_type, onChange);                    
+                }
             }
         };
         next();
